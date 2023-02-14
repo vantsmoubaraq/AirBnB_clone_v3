@@ -12,6 +12,7 @@ from models.state import State
 @app_views.route('/states', methods=['GET', 'POST'])
 @app_views.route('/states/<id>', methods=['GET', 'PUT', 'DELETE'])
 def states(id=None):
+    """State model view"""
     if request.method == 'GET':
         if id:
             obj = storage.get(State, id)
