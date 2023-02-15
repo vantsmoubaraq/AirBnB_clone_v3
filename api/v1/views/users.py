@@ -24,10 +24,12 @@ def users(user_id=None):
             users = [user.to_dict() for user in storage.all(User).values()]
             return jsonify(users)
         return jsonify(user.to_dict())
+    
     elif request.method == "DELETE":
         user.delete()
         storage.save()
         return jsonify({})
+    
     elif request.method == "POST":
         if not request.get_json():
             return make_response(jsonify({"error": "Not a JSON"}), 400)
@@ -36,15 +38,14 @@ def users(user_id=None):
         elif "password" not in request.get_json():
             return make_response(jsonify({"error": "Missing password"}), 400)
         new_dict = request.get_json()
-
         new_user = User(**new_dict)
         new_user.save()
         return make_response(jsonify(new_user.to_dict()), 201)
+    
     elif request.method == "PUT":
         if not request.get_json():
             return make_response(jsonify({"error": "Not a JSON"}), 400)
         updates = request.get_json()
-
         for attr, value in updates.items():
             if attr not in ["id", "email", "created_at", "updates_at"]:
                 setattr(user, attr, value)
