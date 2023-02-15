@@ -18,11 +18,10 @@ def users(user_id=None):
         if user is None:
             abort(404)
             return
-    else:
-        users = [user.to_dict() for user in storage.all(User).values()]
 
     if request.method == "GET":
         if user_id is None:
+            users = [user.to_dict() for user in storage.all(User).values()]
             return jsonify(users)
         return jsonify(user.to_dict())
     elif request.method == "DELETE":
@@ -50,4 +49,4 @@ def users(user_id=None):
             if attr not in ["id", "email", "created_at", "updates_at"]:
                 setattr(user, attr, value)
         user.save()
-        return make_response(jsonify(user.to_dict()), 201)
+        return make_response(jsonify(user.to_dict()), 200)
