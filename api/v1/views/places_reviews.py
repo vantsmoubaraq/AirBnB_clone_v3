@@ -50,7 +50,7 @@ def review(review_id):
         return
 
     if request.method == "GET":
-        return jsonify(review)
+        return jsonify(review.to_dict())
 
     elif request.method == "DELETE":
         review.delete()
