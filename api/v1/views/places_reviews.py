@@ -36,6 +36,7 @@ def place_review(place_id):
         if user is None:
             abort(404)
             return
+        new_dict["place_id"] = place_id
         new_review = Review(**new_dict)
         new_review.save()
         return make_response(jsonify(new_review.to_dict()), 201)
