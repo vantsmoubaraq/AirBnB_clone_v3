@@ -10,7 +10,7 @@ from models.review import Review
 from models.user import User
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET", "POST", "PUT"])
+@app_views.route("/places/<place_id>/reviews", methods=["GET", "POST"])
 def place_review(place_id):
     """handles GET, POST  RESTFul API actions"""
     place = storage.get(Place, place_id)
