@@ -10,6 +10,7 @@ from models.city import City
 from models.place import Place
 from models.user import User
 from models.state import State
+from models.amenity import Amenity
 
 
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE', 'PUT'])
