@@ -10,7 +10,7 @@ from models.review import Review
 from models.user import User
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET", "POST", "PUT"])
+@app_views.route("/places/<place_id>/reviews", methods=["GET", "POST"])
 def place_review(place_id):
     """handles GET, POST  RESTFul API actions"""
     place = storage.get(Place, place_id)
@@ -36,6 +36,7 @@ def place_review(place_id):
         if user is None:
             abort(404)
             return
+        new_dict["place_id"] = place_id
         new_review = Review(**new_dict)
         new_review.save()
         return make_response(jsonify(new_review.to_dict()), 201)
@@ -50,7 +51,7 @@ def review(review_id):
         return
 
     if request.method == "GET":
-        return jsonify(review)
+        return jsonify(review.to_dict())
 
     elif request.method == "DELETE":
         review.delete()
