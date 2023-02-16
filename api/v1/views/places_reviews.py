@@ -29,13 +29,13 @@ def place_review(place_id):
             return make_response(jsonify({"error": "Not a JSON"}), 400)
         elif "user_id" not in request.get_json():
             return make_response(jsonify({"error": "Missing user_id"}), 400)
-        elif "text" not in request.get_json():
-            return make_response(jsonify({"error": "Missing text"}), 400)
-        new_dict = request.get_json()
         user = storage.get(User, new_dict["user_id"])
         if user is None:
             abort(404)
             return
+        elif "text" not in request.get_json():
+            return make_response(jsonify({"error": "Missing text"}), 400)
+        new_dict = request.get_json()
         new_dict["place_id"] = place_id
         new_review = Review(**new_dict)
         new_review.save()
