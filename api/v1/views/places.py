@@ -114,5 +114,5 @@ def search_places():
                 for amenity in amenity_objects:
                     if amenity not in place_amenities:
                         places_with_amenity.pop()
-                        break 
+                        break
         return jsonify(places_with_amenity)
