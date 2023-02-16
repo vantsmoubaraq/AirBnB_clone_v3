@@ -70,6 +70,16 @@ def city_places(city_id=None):
         return jsonify(new_place.to_dict()), 201
 
 
+def add_places(city, places_list):
+    """Adds every place in city to places_list"""
+    if places_list is None or city is None:
+        return
+
+    for place in city.places:
+        places_list.append(place)
+    return places_list
+
+
 @app_views.route('/places_search', methods=['POST'])
 def search_places():
     """searches for a place"""
@@ -120,13 +130,3 @@ def search_places():
 
     places = [place.to_dict() for place in places]
     return jsonify(places)
-
-
-def add_places(city, places_list):
-    """Adds every place in city to places_list"""
-    if places_list is None or city is None:
-        return
-
-    for place in city.places:
-        places_list.append(place)
-    return places_list
