@@ -82,7 +82,8 @@ def search_places():
     amenities = parameters.get('amenities', [])
 
     if not states and not cities and not amenities:
-        places = [place for place in storage.all(Place).values()]
+        places = [place.to_dict() for place in storage.all(Place).values()]
+        return jsonify(places)
     else:
         if amenities:
             amenity_objects = []
@@ -106,7 +107,6 @@ def search_places():
                 for place in city.places:
                     places.append(place)
         places_with_amenity = []
-
         if places:
             for place in places:
                 place_amenities = place.amenities
@@ -114,5 +114,5 @@ def search_places():
                 for amenity in amenity_objects:
                     if amenity not in place_amenities:
                         places_with_amenity.pop()
-                        break
+                        break 
         return jsonify(places_with_amenity)
