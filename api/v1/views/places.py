@@ -85,7 +85,7 @@ def search_places():
         if amenity:
             amenity_objects.append(amenity)
     if states == cities == []:
-        places = storage.all(Place).values()
+        places = [place for place in storage.all(Place).values()]
     else:
         places = []
         for state_id in states:
