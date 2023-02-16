@@ -102,7 +102,7 @@ def search_places():
     for place in places:
         for amenity_id in amenities:
             amenity = storage.get(Amenity, amenity_id)
-            if (amenity) and (amenity not in places.amenities):
+            if (amenity) and (amenity not in place.amenities):
                 places.remove(place)
                 break
 
