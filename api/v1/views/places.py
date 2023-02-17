@@ -70,16 +70,6 @@ def city_places(city_id=None):
         return jsonify(new_place.to_dict()), 201
 
 
-def add_places(city, places_list):
-    """Adds every place in city to places_list"""
-    if city is None:
-        return
-
-    for place in city.places:
-        places_list.append(place)
-    return places_list
-
-
 @app_views.route('/places_search', methods=['POST'])
 def search_places():
     """searches for a place"""
@@ -95,38 +85,46 @@ def search_places():
         places = [place.to_dict() for place in storage.all(Place).values()]
         return jsonify(places)
 
-    if amenities and not states and not cities:
-        places = [place for place in storage.all(Place).values()]
+    places = []
+    all_cities = []
+
+    if states:
+        for state_id in states:
+            state = storage.get(State, state_id)
+            if state:
+                for city in state.cities:
+                    all_cities.append(city.id)
+                    places = add_places(city, places)
+
+    if cities:
+        for city_id in cities:
+            city = storage.get(City, city_id)
+            if city and city.id not in all_cities:
+                places = add_places(city, places)
+
+    if amenities:
+        if not places:
+            places = [place for place in storage.all(Place).values()]
         for place in places:
             for amenity_id in amenities:
                 amenity = storage.get(Amenity, amenity_id)
                 if amenity not in place.amenities:
                     places.remove(place)
                     break
-        places = [place.to_dict() for place in places]
-        return jsonify(places)
-
-    places = []
-    all_cities = []
-
-    for state_id in states:
-        state = storage.get(State, state_id)
-        if state:
-            for city in state.cities:
-                all_cities.append(city.id)
-                places = add_places(city, places)
-
-    for city_id in cities:
-        city = storage.get(City, city_id)
-        if city and city.id not in all_cities:
-            places = add_places(city, places)
-
-    for place in places:
-        for amenity_id in amenities:
-            amenity = storage.get(Amenity, amenity_id)
-            if amenity not in place.amenities:
-                places.remove(place)
-                break
 
     places = [place.to_dict() for place in places]
-    return jsonify(places)
+    confirmed_places = []
+    for place in places:
+        place.pop("amenities", None)
+        confirmed_places.append(place)
+    return jsonify(confirmed_places)
+
+
+def add_places(city, places_list):
+    """Adds every place in city to places_list"""
+    if city is None:
+        return places_list
+
+    for place in city.places:
+        places_list.append(place)
+    return places_list
