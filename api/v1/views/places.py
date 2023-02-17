@@ -108,15 +108,16 @@ def search_places():
         for place in places:
             for amenity_id in amenities:
                 amenity = storage.get(Amenity, amenity_id)
-                if not place.amenities:
-                    places.remove(place)
-                    break
-                elif amenity not in place.amenities:
+                if amenity not in place.amenities:
                     places.remove(place)
                     break
 
     places = [place.to_dict() for place in places]
-    return jsonify(places)
+    confirmed_places = []
+    for place in places:
+        place.pop("amenities", None)
+        comfirmed_places.append(place)
+    return jsonify(confirmed_places)
 
 
 def add_places(city, places_list):
