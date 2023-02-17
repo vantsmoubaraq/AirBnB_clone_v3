@@ -72,7 +72,7 @@ def city_places(city_id=None):
 
 def add_places(city, places_list):
     """Adds every place in city to places_list"""
-    if places_list is None or city is None:
+    if city is None:
         return
 
     for place in city.places:
